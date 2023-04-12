@@ -2,23 +2,24 @@ import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
 
-const MySlider = () => {
-  const [sliderValue, setSliderValue] = useState(60); // Initial value set to 60
-
+const MySlider = (props) => {
+  const [sliderValue, setSliderValue] = useState(60);
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (sliderValue > 0) {
-        setSliderValue(sliderValue - 1);
-      } else {
-        setSliderValue(60);
-      }
-    }, 1000);
+    let timer;
+    if (props.set) {
+      timer = setTimeout(() => {
+        if (sliderValue > 0) {
+          setSliderValue(sliderValue - 1);
+        } else {
+          setSliderValue(60);
+        }
+      }, 1000);
+    }
 
     return () => {
       clearTimeout(timer);
     };
-  }, [sliderValue]);
-
+  }, [sliderValue, props.set]);
   return (
     <Container>
       <Text>

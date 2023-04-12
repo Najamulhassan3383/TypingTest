@@ -2,22 +2,57 @@ import React from "react";
 import MySlider from "./Slider";
 import styled from "@emotion/styled";
 import InputComp from "./Input";
+import { useRef } from "react";
 
 let words =
   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis sed quasi architecto quod inventore accusamus aliquid eum commodi consequuntur excepturi eligendi nisi dolores veritatis facilis quibusdam quas incidunt ipsam cumque?";
 
-function MainHero() {
+function MainHero(props) {
+  const [correct, setCorrect] = React.useState(true);
+  const [index, setIndex] = React.useState(0);
+  const [startedTyping, setStartedTyping] = React.useState(false);
+
+  const spanRerefs = useRef([]);
+
+  React.useEffect(() => {
+    // spanRerefs.current[index + 1].style.color = "yellow";
+    if (index === 0) {
+      spanRerefs.current[0].style.color = "yellow";
+    } else if (correct && index > 0) {
+      spanRerefs.current[index - 1].style.color = "green";
+      spanRerefs.current[index].style.color = "yellow";
+    } else if (!correct && index > 0) {
+      spanRerefs.current[index - 1].style.color = "red";
+      spanRerefs.current[index].style.color = "yellow";
+    }
+  }, [correct, index]);
+
   return (
     <div>
-      <MySlider />
+      <MySlider set={startedTyping} />
       <Hero>
         <Stylingscontainer>
           <HeroText>
-            {[...words].map((word, index) => {
-              return <span key={index}>{word === " " ? "\u00A0" : word}</span>;
-            })}
+            {words.split(" ").map((word, i) => (
+              <span
+                key={i}
+                ref={(el) => (spanRerefs.current[i] = el)}
+                style={{ color: "inherit" }}
+              >
+                {word + "\u00A0"}
+              </span>
+            ))}
           </HeroText>
-          <InputComp />
+          <InputComp
+            setindex={setIndex}
+            word={props.word}
+            setRes={setCorrect}
+            index={index}
+            setTyping={setStartedTyping}
+            typing={startedTyping}
+
+            // f={spanRerefs}
+          />
         </Stylingscontainer>
       </Hero>
     </div>
@@ -69,5 +104,6 @@ const Stylingscontainer = styled.div`
     border-radius: 5px;
     padding: 0 1rem;
     font-family: "Roboto Mono", monospace;
+    overflow: scroll;
     }
 `;

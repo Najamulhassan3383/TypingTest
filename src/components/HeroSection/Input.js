@@ -1,11 +1,55 @@
 import React from "react";
 import styled from "@emotion/styled";
 import { RepeatClockIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import { useRef } from "react";
+import { configure, prettyDOM } from "@testing-library/react";
+let words =
+  "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis sed quasi architecto quod inventore accusamus aliquid eum commodi consequuntur excepturi eligendi nisi dolores veritatis facilis quibusdam quas incidunt ipsam cumque?";
+words = words.split(" ");
 
-function InputComp() {
+function InputComp(props) {
+  const [inputText, setInputText] = useState("");
+
+  const inputRef = useRef(null);
+
+  const handleChange = (e) => {
+    let word = e.target.value;
+    const last_char = word[word.length - 1];
+    word = word.trim();
+    if (!props.typing) {
+      console.log("typing");
+      props.setTyping((prev) => !prev);
+    }
+
+    if (last_char === " ") {
+      if (word && word === words[props.index]) {
+        props.setRes(true);
+        console.log("correct");
+      } else {
+        props.setRes(false);
+        console.log("incorrect");
+      }
+
+      setInputText("");
+      props.setindex((prev) => prev + 1);
+    } else {
+      setInputText(word);
+    }
+  };
+
   return (
     <Container>
-      <Input type="text" placeholder="" />
+      <Input
+        type="text"
+        placeholder=""
+        value={inputText}
+        onChange={handleChange}
+        ref={inputRef}
+        style={{
+          color: inputText === words[props.index] ? "green" : "inherit",
+        }}
+      />
       <Button>
         <RepeatClockIcon />
       </Button>
