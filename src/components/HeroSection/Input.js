@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import { RepeatClockIcon } from "@chakra-ui/icons";
 import { useState } from "react";
 import { useRef } from "react";
-import { configure, prettyDOM } from "@testing-library/react";
+
 let words =
   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis sed quasi architecto quod inventore accusamus aliquid eum commodi consequuntur excepturi eligendi nisi dolores veritatis facilis quibusdam quas incidunt ipsam cumque?";
 words = words.split(" ");
@@ -12,6 +12,10 @@ function InputComp(props) {
   const [inputText, setInputText] = useState("");
 
   const inputRef = useRef(null);
+
+  const handleClick = () => {
+    window.location.reload();
+  };
 
   const handleChange = (e) => {
     let word = e.target.value;
@@ -36,6 +40,7 @@ function InputComp(props) {
     } else {
       setInputText(word);
     }
+    props.count((prev) => prev + 1);
   };
 
   return (
@@ -51,7 +56,7 @@ function InputComp(props) {
         }}
       />
       <Button>
-        <RepeatClockIcon />
+        <RepeatClockIcon onClick={handleClick} />
       </Button>
     </Container>
   );

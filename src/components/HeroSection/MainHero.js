@@ -15,7 +15,6 @@ function MainHero(props) {
   const spanRerefs = useRef([]);
 
   React.useEffect(() => {
-    // spanRerefs.current[index + 1].style.color = "yellow";
     if (index === 0) {
       spanRerefs.current[0].style.color = "yellow";
     } else if (correct && index > 0) {
@@ -29,7 +28,7 @@ function MainHero(props) {
 
   return (
     <div>
-      <MySlider set={startedTyping} />
+      <MySlider set={startedTyping} cpm={props.cpm} />
       <Hero>
         <Stylingscontainer>
           <HeroText>
@@ -50,6 +49,7 @@ function MainHero(props) {
             index={index}
             setTyping={setStartedTyping}
             typing={startedTyping}
+            count={props.count}
 
             // f={spanRerefs}
           />

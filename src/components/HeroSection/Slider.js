@@ -1,9 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
 import { Slider, SliderTrack, SliderFilledTrack } from "@chakra-ui/react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
+import { useDisclosure, Button } from "@chakra-ui/react";
 
 const MySlider = (props) => {
-  const [sliderValue, setSliderValue] = useState(60);
+  const [sliderValue, setSliderValue] = useState(10);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   useEffect(() => {
     let timer;
     if (props.set) {
@@ -11,7 +23,9 @@ const MySlider = (props) => {
         if (sliderValue > 0) {
           setSliderValue(sliderValue - 1);
         } else {
-          setSliderValue(60);
+          //stops the timer
+          clearTimeout(timer);
+          onOpen();
         }
       }, 1000);
     }
@@ -19,7 +33,8 @@ const MySlider = (props) => {
     return () => {
       clearTimeout(timer);
     };
-  }, [sliderValue, props.set]);
+  }, [sliderValue, props.set, onClose]);
+
   return (
     <Container>
       <Text>
@@ -43,6 +58,25 @@ const MySlider = (props) => {
           </SliderTrack>
         </Slider>
       </SliderContainer>
+
+      {/* Render modal based on isOpen state */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Your Score</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p>WPM: {props.cpm}</p>
+            {/* <p>Accuracy: {props.accuracy}</p> */}
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Container>
   );
 };

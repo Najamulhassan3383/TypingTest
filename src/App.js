@@ -6,21 +6,16 @@ import styled from "@emotion/styled";
 import MainHero from "./components/HeroSection/MainHero";
 import Footer from "./components/Footer";
 import { useState } from "react";
-import { ClassNames } from "@emotion/react";
 
 function App() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [typedWord, setTypedWord] = useState("");
+  const [numofWords, setNumofWords] = useState(0);
 
-  const handleIndex = () => {
-    setCurrentIndex(currentIndex + 1);
-  };
-
+  const characterPerMinute = numofWords / 5;
   return (
     <MainContainer>
       <Screen>
         <NavBar />
-        <MainHero setIndex={handleIndex} word={setTypedWord} />
+        <MainHero count={setNumofWords} cpm={characterPerMinute} />
         <Footer />
       </Screen>
     </MainContainer>
